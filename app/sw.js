@@ -1,7 +1,8 @@
 // BYK web app: network-first for the page, cache-first for static assets → opens offline.
-const CACHE = 'byk-v2';
+const CACHE = 'byk-v3';
 self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './manifest.json', './icon-192.png']).catch(() => {}))); });
-self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
+// a new version took over → reload every open window of the app into it (so a home-screen app updates by itself)
+self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()).then(() => self.clients.matchAll({ type: 'window' })).then((cs) => Promise.all(cs.map((c) => c.navigate(c.url).catch(() => {}))))); });
 self.addEventListener('fetch', (e) => {
   const req = e.request; const url = new URL(req.url);
   if (req.method !== 'GET' || url.origin !== self.location.origin) return; // Supabase calls go straight to the network
