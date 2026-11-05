@@ -17,11 +17,34 @@
       body { overflow: hidden; margin: 0; background: #fff; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
       #root { display: flex; height: 100%; flex: 1; }
       input, textarea { font-size: 16px; } /* stops iOS zoom-on-focus */
+      /* loading screen while the app starts (instead of a blank white page) */
+      #boot { position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: #F2F2F7; font-family: -apple-system, system-ui, sans-serif; direction: rtl; transition: opacity .25s; }
+      #boot img { width: 84px; height: 84px; border-radius: 20px; }
+      #boot .sp { width: 26px; height: 26px; border: 3px solid rgba(0,122,255,.2); border-top-color: #007AFF; border-radius: 50%; animation: bs .8s linear infinite; }
+      #boot .t { font-size: 15px; color: #6C6C70; text-align: center; padding: 0 24px; line-height: 1.5; }
+      #boot button { display: none; height: 46px; padding: 0 28px; border: 0; border-radius: 13px; background: #007AFF; color: #fff; font-size: 16px; font-weight: 700; }
+      @keyframes bs { to { transform: rotate(360deg); } }
+      @media (prefers-color-scheme: dark) { #boot { background: #000; } #boot .t { color: #98989F; } }
     </style>
   </head>
   <body>
     <noscript>צריך להפעיל JavaScript כדי להשתמש באפליקציה.</noscript>
     <div id="root"></div>
-  <script src="/Byk-preview/app/_expo/static/js/web/index-0404813579d4718785ef3834d6dcac52.js" defer></script>
+    <div id="boot"><img src="icon-192.png" alt="BYK"><div class="sp"></div><div class="t" id="boot-t">טוען…</div><button id="boot-b" onclick="location.reload()">טעינה מחדש</button></div>
+    <script>
+      (function () {
+        var t0 = Date.now(), el = document.getElementById('boot');
+        var iv = setInterval(function () {
+          var root = document.getElementById('root');
+          if (window.__BYK_BOOTED && root && root.children.length) { el.style.opacity = '0'; setTimeout(function () { el.remove(); }, 260); clearInterval(iv); return; }
+          var s = (Date.now() - t0) / 1000;
+          if (window.__BYK_BOOT_ERR || s > 25) {
+            document.getElementById('boot-t').textContent = window.__BYK_BOOT_ERR ? 'הטעינה נכשלה. הנתונים שמורים במכשיר.' : 'הטעינה לוקחת יותר מהרגיל…';
+            document.getElementById('boot-b').style.display = 'block';
+          } else if (s > 8) document.getElementById('boot-t').textContent = 'טוען את הנתונים מהמכשיר…';
+        }, 300);
+      })();
+    </script>
+  <script src="/Byk-preview/app/_expo/static/js/web/index-165ebab72ed5980dcaf8782c0d3550d4.js" defer></script>
 </body>
 </html>
