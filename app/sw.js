@@ -1,6 +1,6 @@
 // BYK web app: network-first for the page, cache-first for static assets → opens offline.
 const CACHE = 'byk-v4';
-self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './manifest.json', './icon-192.png']).catch(() => {}))); });
+self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './manifest.json', './icon-192.png', './sql-wasm-1.11.0.wasm']).catch(() => {}))); });
 // a new version took over → just take control. (It used to also force-reload every open window; on Android that
 // reload could land in the middle of the app starting and leave it stuck on a white screen. The app itself
 // reloads into a new version when it comes back to the front.)
