@@ -12,6 +12,16 @@
     <meta name="apple-mobile-web-app-title" content="BYK" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="theme-color" content="#FFFFFF" />
+    <!-- no text selection / copy menu anywhere in the app (long-press would open "העתקה"); typing fields stay editable -->
+    <style id="no-select">
+      *, *::before, *::after { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+      input, textarea, [contenteditable="true"] { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
+      img { -webkit-user-drag: none; }
+    </style>
+    <script>
+      document.addEventListener('copy', function (e) { var t = e.target; if (!(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA'))) e.preventDefault(); });
+      document.addEventListener('contextmenu', function (e) { var t = e.target; if (!(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA'))) e.preventDefault(); });
+    </script>
     <style id="expo-reset">
       html, body { height: 100%; }
       body { overflow: hidden; margin: 0; background: #fff; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
